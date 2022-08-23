@@ -1,0 +1,80 @@
+name: Format, build and test
+
+on:
+  workflow_call:
+    inputs:
+      wasm:
+        description: Whether the files are built to WASM
+        type: boolean
+
+jobs:
+  format:
+    name: Run gofmt
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ (inputs.wasm && '1.18') || '1.16' }}
+
+      - name: Format
+        run: if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then exit 1; fi
+
+  build-and-test:
+    name: Run go test and go build
+
+    runs-on: ubuntu-latest
+
+    env:
+      DISPLAY: ':99.0'
+
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ (inputs.wasm && '1.18') || '1.16' }}
+
+      - name: Install deps of Ebitengine
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc xvfb libc6-dev libglu1-mesa-dev libgl1-mesa-dev libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev libxxf86vm-dev libasound2-dev pkg-config
+        if: inputs.wasm
+
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@latest
+        if: inputs.wasm
+
+      - name: Install wasmbrowsertest
+        run: go install github.com/agnivade/wasmbrowsertest@latest
+        if: inputs.wasm
+
+      - name: Setup go_js_wasm_exec
+        run: mv $(go env GOPATH)/bin/wasmbrowsertest $(go env GOPATH)/bin/go_js_wasm_exec
+        if: inputs.wasm
+
+      - name: Update go.mod
+        run: go mod tidy
+
+      - name: Test
+        run: xvfb-run --auto-servernum go test -v ./...
+        env:
+          GOOS: js
+          GOARCH: wasm
+        if: inputs.wasm
+
+      - name: Test
+        run: go test -v ./...
+        if: !inputs.wasm
+
+      - name: Build
+        run: go build ./...
+        env:
+          GOOS: js
+          GOARCH: wasm
+        if: inputs.wasm
+
+      - name: Build
+        run: go build ./...
+        if: !inputs.wasm
