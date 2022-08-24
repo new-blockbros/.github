@@ -66,7 +66,7 @@ jobs:
 
       - name: Test
         run: go test -v ./...
-        if: !inputs.wasm
+        if: ${{ !inputs.wasm }}
 
       - name: Build
         run: go build ./...
@@ -77,4 +77,4 @@ jobs:
 
       - name: Build
         run: go build ./...
-        if: !inputs.wasm
+        if: ${{ !inputs.wasm }}
