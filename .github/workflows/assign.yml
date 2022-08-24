@@ -2,6 +2,13 @@ name: Assign author
 
 on:
   workflow_call:
+    inputs:
+      number:
+        description: PR number
+        type: number
+      assignee:
+        description: The user to be assigned
+        type: string
 
 jobs:
   assign:
@@ -14,6 +21,5 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-          NUMBER: ${{ github.event.pull_request.number }}
-          ASSIGNEE: ${{ github.event.pull_request.user.login }}
-        if: ${{ toJSON(github.event.pull_request.assignees) == '[]' }}
+          NUMBER: ${{ inputs.number }}
+          ASSIGNEE: ${{ inputs.assignee }}
