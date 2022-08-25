@@ -100,7 +100,11 @@ jobs:
         run: |
           xvfb-run -a go test -v ./... > result
           cat result
-          [ $(cat result | grep '^FAIL$' | wc -l) = 0 ]
+          if [ $(cat result | grep '^FAIL$' | wc -l) -gt 0 ]; then
+            echo "::error::go test failed."
+            cat result | grep 'FAIL'
+            exit 1
+          fi
         env:
           GOOS: js
           GOARCH: wasm
