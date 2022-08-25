@@ -97,7 +97,10 @@ jobs:
         run: go mod tidy
 
       - name: Test
-        run: xvfb-run --auto-servernum go test -v ./...
+        run: |
+          xvfb-run -a go test -v ./... > result
+          cat result
+          [ $(cat result | grep '^FAIL$' | wc -l) = 0 ]
         env:
           GOOS: js
           GOARCH: wasm
