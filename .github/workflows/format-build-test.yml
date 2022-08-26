@@ -93,16 +93,21 @@ jobs:
         run: mv $(go env GOPATH)/bin/wasmbrowsertest $(go env GOPATH)/bin/go_js_wasm_exec
         if: inputs.wasm
 
+      - name: Set up gotestfmt
+        uses: haveyoudebuggedit/gotestfmt-action@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Update go.mod
         run: go mod tidy
 
       - name: Test
         run: |
-          xvfb-run -a go test -v ./... > result
-          cat result
-          if [ $(cat result | grep '^FAIL$' | wc -l) -gt 0 ]; then
+          set -euo pipefail
+          xvfb-run -a go test -json -v ./... > result
+          cat result | tee /tmp/gotest.log | gotestfmt
+          if [ $(cat result | grep '"Action":"fail"' | wc -l) -gt 0 ]; then
             echo "::error::go test failed."
-            cat result | grep 'FAIL'
             exit 1
           fi
         env:
@@ -111,8 +116,18 @@ jobs:
         if: inputs.wasm
 
       - name: Test
-        run: go test -v ./...
+        run: |
+          set -euo pipefail
+          go test -json -v ./... 2>&1 | tee /tmp/gotest.log | gotestfmt
         if: ${{ !inputs.wasm }}
+
+      - name: Upload test log
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-log
+          path: /tmp/gotest.log
+          if-no-files-found: error
 
       - name: Build
         run: go build ./...
