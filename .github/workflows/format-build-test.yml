@@ -22,11 +22,11 @@ jobs:
         id: env
         run: |
           if [ ${{ inputs.wasm }} == 'true' ]; then
-            echo "::set-output name=version::1.18"
-            echo "::set-output name=working-directory::./client"
+            echo "version=1.18" >> $GITHUB_OUTPUT
+            echo "working-directory=./client" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=version::1.16"
-            echo "::set-output name=working-directory::."
+            echo "version=1.16" >> $GITHUB_OUTPUT
+            echo "working-directory=." >> $GITHUB_OUTPUT
           fi
 
   format:
