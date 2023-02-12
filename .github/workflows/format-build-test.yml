@@ -25,7 +25,7 @@ jobs:
             echo "version=1.18" >> $GITHUB_OUTPUT
             echo "working-directory=./client" >> $GITHUB_OUTPUT
           else
-            echo "version=1.16" >> $GITHUB_OUTPUT
+            echo "version=1.19" >> $GITHUB_OUTPUT
             echo "working-directory=." >> $GITHUB_OUTPUT
           fi
 
