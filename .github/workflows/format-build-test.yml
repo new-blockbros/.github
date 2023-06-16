@@ -21,11 +21,10 @@ jobs:
       - name: Get version and working directory
         id: env
         run: |
+          echo "version=1.20" >> $GITHUB_OUTPUT
           if [ ${{ inputs.wasm }} == 'true' ]; then
-            echo "version=1.18" >> $GITHUB_OUTPUT
             echo "working-directory=./client" >> $GITHUB_OUTPUT
           else
-            echo "version=1.19" >> $GITHUB_OUTPUT
             echo "working-directory=." >> $GITHUB_OUTPUT
           fi
 
