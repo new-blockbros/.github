@@ -64,6 +64,7 @@ jobs:
 
     env:
       DISPLAY: ':99.0'
+      TEST_LOG_PATH: /tmp/gotest.log
 
     steps:
       - name: Checkout
@@ -103,9 +104,9 @@ jobs:
       - name: Test
         run: |
           set -euo pipefail
-          GOOS=js GOARCH=wasm xvfb-run -a go test -json -v ./... > result
-          cat result | tee /tmp/gotest.log | gotestfmt
-          if [ $(cat result | grep '"Action":"fail"' | wc -l) -gt 0 ]; then
+          GOOS=js GOARCH=wasm xvfb-run -a go test -json -v ./... > $TEST_LOG_PATH
+          cat $TEST_LOG_PATH | gotestfmt
+          if [ $(cat $TEST_LOG_PATH | grep '"Action":"fail"' | wc -l) -gt 0 ]; then
             echo "::error::go test failed."
             exit 1
           fi
@@ -114,7 +115,7 @@ jobs:
       - name: Test
         run: |
           set -euo pipefail
-          go test -json -v ./... 2>&1 | tee /tmp/gotest.log | gotestfmt
+          go test -json -v ./... 2>&1 | tee $TEST_LOG_PATH | gotestfmt
         if: ${{ !inputs.wasm }}
 
       - name: Upload test log
@@ -122,7 +123,7 @@ jobs:
         if: always()
         with:
           name: test-log
-          path: /tmp/gotest.log
+          path: ${{ env.TEST_LOG_PATH }}
           if-no-files-found: error
 
       - name: Build
