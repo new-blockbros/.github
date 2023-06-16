@@ -103,15 +103,12 @@ jobs:
       - name: Test
         run: |
           set -euo pipefail
-          xvfb-run -a go test -json -v ./... > result
+          GOOS=js GOARCH=wasm xvfb-run -a go test -json -v ./... > result
           cat result | tee /tmp/gotest.log | gotestfmt
           if [ $(cat result | grep '"Action":"fail"' | wc -l) -gt 0 ]; then
             echo "::error::go test failed."
             exit 1
           fi
-        env:
-          GOOS: js
-          GOARCH: wasm
         if: inputs.wasm
 
       - name: Test
