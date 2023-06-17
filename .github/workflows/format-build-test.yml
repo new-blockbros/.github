@@ -78,15 +78,13 @@ jobs:
       - name: Install deps of Ebitengine
         run: |
           sudo apt-get update
-          sudo apt-get install -y gcc xvfb libc6-dev libglu1-mesa-dev libgl1-mesa-dev libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev libxxf86vm-dev libasound2-dev pkg-config
-        if: inputs.wasm
-
-      - name: Install Chrome
-        uses: browser-actions/setup-chrome@latest
+          sudo apt-get install -y gcc libc6-dev libglu1-mesa-dev libgl1-mesa-dev libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev libxxf86vm-dev libasound2-dev pkg-config
         if: inputs.wasm
 
       - name: Install wasmbrowsertest
-        run: go install github.com/agnivade/wasmbrowsertest@latest
+        run: |
+          go install github.com/agnivade/wasmbrowsertest@bb77d443e302d06f0d2462336bc2765942e0e862
+          go install github.com/agnivade/wasmbrowsertest/cmd/cleanenv@bb77d443e302d06f0d2462336bc2765942e0e862
         if: inputs.wasm
 
       - name: Setup go_js_wasm_exec
@@ -101,11 +99,14 @@ jobs:
       - name: Update go.mod
         run: go mod tidy
 
+      - name: Xvfb
+        run: |
+          Xvfb :99 -screen 0 1024x768x24 &
+
       - name: Test
         run: |
-          set -euo pipefail
-          GOOS=js GOARCH=wasm xvfb-run -a go test -json -v ./... > $TEST_LOG_PATH || :
-          cat $TEST_LOG_PATH | gotestfmt
+          env GOOS=js GOARCH=wasm cleanenv -remove-prefix GITHUB_ -- go test -shuffle on -json -v ./... > $TEST_LOG_PATH || :
+          cat $TEST_LOG_PATH | gotestfmt || :
           if [ $(cat $TEST_LOG_PATH | grep '"Action":"fail"' | wc -l) -gt 0 ]; then
             echo "::error::go test failed."
             exit 1
