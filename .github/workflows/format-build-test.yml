@@ -23,7 +23,7 @@ jobs:
         run: |
           echo "version=1.20" >> $GITHUB_OUTPUT
           if [ ${{ inputs.wasm }} == 'true' ]; then
-            echo "working-directory=./client" >> $GITHUB_OUTPUT
+            echo "working-directory=./wasm" >> $GITHUB_OUTPUT
           else
             echo "working-directory=." >> $GITHUB_OUTPUT
           fi
