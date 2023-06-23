@@ -4,24 +4,6 @@ Thank you for your time to contribute the New Block Bros project!
 
 Please read and obey rules described below before your contribution.
 
-## Link with Trello board
-
-In [Trello board](https://trello.com/b/nE04Jlfa/new-block-bros-roadmap), pick up a task you want to work on.
-
-Then, move the card to `🚧 In progress` section and assign your account to that card.
-
-Once you create a branch and PR in GitHub, please link those from Trello card.
-
-After the PR is merged, please move the card to `✅ Completed` section.
-
-## Branch names
-
-To make CD work correctly, a branch name may only contain lowercase alphabet letters ([a-z]), digits ([0-9]), hyphens (-) and underscores (\_).
-
-It must begin and end with a letter or digit.
-
-If you mistakenly open a PR with a invalid branch name, please rename your branch to a valid name and reopen a PR.
-
 ## Format codes
 
 Please format your codes with Prettier to make them look consistent.
