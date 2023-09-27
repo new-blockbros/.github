@@ -28,7 +28,7 @@ This section describes technical details about how the goal is achieved.
 ## Checklist
 
 <!--
-This section shows what did you confirmed for the changes.
+This section shows what you confirmed for the changes.
 
 They usually include acceptance criteria.
 -->
