@@ -1,5 +1,5 @@
 <!--
-Attach Jira link if any.
+Attach the Jira link if any.
 
 [![Jira](https://img.shields.io/badge/Jira-NBB--xxx-2684FF.svg?logo=jira&style=plastic)](https://new-blockbros.atlassian.net/browse/NBB-xxx)
 -->
@@ -8,7 +8,7 @@ Attach Jira link if any.
 
 <!--
 This section describes why we need the changes.
-For example, you can describe a background, requests or problems you want to solve.
+For example, you can describe a background, requests, or problems you want to solve.
 
 > As a *type of user*, I want to *perform some task* so that I can *achieve some goal*.
 -->
@@ -37,7 +37,7 @@ They usually include acceptance criteria.
 
 <!--
 Attach screenshots or screencasts if any.
-It is desirable to attach both version of before and after.
+It is desirable to attach both versions of the before and the after.
 
 ![none](https://img.shields.io/badge/-None-inactive.svg)
 -->
