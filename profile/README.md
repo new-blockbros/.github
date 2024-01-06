@@ -10,7 +10,7 @@ We port Block Bros from Cocos2d-x using native JavaScript to what's more better 
 
 ## Our Vision
 
-Please refer to [the vision page](https://github.com/orgs/new-blockbros/discussions/87).
+Please refer to [the vision page](https://github.com/orgs/new-blockbros/discussions/1).
 
 The roadmap which describes what we are going to do can be seen in [Trello](https://trello.com/b/nE04Jlfa/new-block-bros-roadmap).
 
